@@ -1,0 +1,38 @@
+
+# This file - script-contents is used to create the run-test script
+# present in <buildPath>.
+
+# The variables sourcePath and buildPath are set using CMake.
+# Rest of the script works based on those variables.
+
+
+compiler="$buildPath/compiler/ssc"
+runtime="$buildPath/runtime/libsubscheme-rt.a"
+testPath="$sourcePath/test"
+testWorkingDir="$buildPath/test"
+
+mkdir -p $testWorkingDir
+
+for file in $testPath/*.scm;
+do
+  fileName=${file##*/}
+  asmFile="$testWorkingDir/$fileName.s"
+  cFile="$testWorkingDir/$fileName.c"
+  objectFile="$testWorkingDir/$fileName.o"
+  execFile="$testWorkingDir/$fileName.exec"
+
+  secondLine=`sed -n '2p' $file`
+  expectedOutput="${secondLine:2}"
+
+  $compiler $file > $cFile
+  clang -c $cFile -o $objectFile
+  clang $runtime $objectFile -o $execFile
+
+  if [ "$execFile 2>&1 | grep -q $expectedOutput" ];
+  then
+    echo "$fileName passed"
+  else
+    echo "$fileName failed"
+  fi
+
+done

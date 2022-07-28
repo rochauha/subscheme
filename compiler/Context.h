@@ -24,6 +24,8 @@ public:
 
   SExpr *createIntLiteral(std::string_view integerStr);
 
+  SExpr *createSymbolAtom(std::string_view symbolName);
+
   SExpr *createPair(SExpr *first, SExpr *rest);
 
 private:

@@ -50,6 +50,12 @@ SExpr *Context::createIntLiteral(std::string_view integerStr) {
   return intLiteral;
 }
 
+SExpr *Context::createSymbolAtom(std::string_view symbolName) {
+  SExpr *expr = new SExpr(SExpr::Symbol, symbolName);
+  allocatedExprs.push_back(expr);
+  return expr;
+}
+
 SExpr *Context::createPair(SExpr *first, SExpr *rest) {
   SExpr *pair = new SExpr(SExpr::Pair, first, rest);
   allocatedExprs.push_back(pair);

@@ -21,6 +21,8 @@ private:
 
   SExpr *parseInteger();
 
+  SExpr *parseSymbol();
+
   Lexer &lexer;
 
   Token currentToken;

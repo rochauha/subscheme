@@ -28,16 +28,16 @@ Token Lexer::lexToken() {
       continue;
 
     case '+':
-      if (&curPtr[1] != bufferEnd &&
-          isdigit(curPtr[1])) // ignore '+' if it is used to indicate sign
+      // ignore '+' if it is used to indicate sign
+      if (&curPtr[1] != bufferEnd && isdigit(curPtr[1]))
         ++curPtr;
-      continue; // todo, + can also be standalone
+      else
+        return lexSymbol(curPtr);
 
     case '-':
-      if (&curPtr[1] != bufferEnd && isdigit(curPtr[1])) {
+      if (&curPtr[1] != bufferEnd && isdigit(curPtr[1]))
         return lexNumber(curPtr);
-      }
-      continue; // todo, - can also be standalone
+      return lexSymbol(curPtr);
 
     case '0':
     case '1':
@@ -50,6 +50,9 @@ Token Lexer::lexToken() {
     case '8':
     case '9':
       return lexNumber(curPtr);
+
+    default:
+      return lexSymbol(curPtr);
     }
   }
 }
@@ -66,4 +69,15 @@ Token Lexer::lexNumber(const char *tokenStart) {
 
   size_t length = curPtr - tokenStart;
   return createToken(Token::Integer, tokenStart, length);
+}
+
+Token Lexer::lexSymbol(const char *tokenStart) {
+  assert(curPtr != bufferEnd);
+
+  while (curPtr != bufferEnd && !isspace(*curPtr)) {
+    ++curPtr;
+  }
+
+  size_t length = curPtr - tokenStart;
+  return createToken(Token::Symbol, tokenStart, length);
 }

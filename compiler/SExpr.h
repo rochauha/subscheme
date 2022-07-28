@@ -37,7 +37,7 @@ private:
 
   SExpr(Kind k, int64_t intLiteral);
 
-  SExpr(Kind k, char *symbolName);
+  SExpr(Kind k, std::string_view symbolName);
 
   SExpr(Kind k, SExpr *first, SExpr *rest);
 
@@ -45,7 +45,7 @@ private:
 
   int64_t integerLiteral;
 
-  char *symbolName;
+  std::string_view symbolName;
 
   SExpr *first;
 

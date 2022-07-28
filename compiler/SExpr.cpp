@@ -19,7 +19,7 @@ SExpr::SExpr(Kind k, int64_t intLiteral) {
   rest = nullptr;
 }
 
-SExpr::SExpr(Kind k, char *symbolName) {
+SExpr::SExpr(Kind k, std::string_view symbolName) {
   assert(k == Symbol && "this constructor only creates symbolic values");
   kind = k;
   this->symbolName = symbolName;

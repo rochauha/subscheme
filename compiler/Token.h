@@ -6,7 +6,7 @@
 
 class Token {
 public:
-  enum Kind { Integer, Lparen, Rparen };
+  enum Kind { Integer, Symbol, Lparen, Rparen };
 
   Token() = default;
 
@@ -23,6 +23,9 @@ public:
     switch (kind) {
     case Integer:
       os << "Integer";
+      break;
+    case Symbol:
+      os << "Symbol";
       break;
     case Lparen:
       os << "Lparen";

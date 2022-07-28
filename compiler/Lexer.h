@@ -23,6 +23,8 @@ private:
 
   Token lexNumber(const char *tokStart);
 
+  Token lexSymbol(const char *tokStart);
+
   std::string_view textBuffer;
   const char *curPtr;
   const char *bufferEnd;

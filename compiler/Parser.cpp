@@ -11,11 +11,16 @@ SExpr *Parser::parse() {
     expr = parseInteger();
     break;
 
+  case Token::Symbol:
+    expr = parseSymbol();
+    break;
+
   case Token::Lparen:
     expr = parseSExpr();
     break;
 
   case Token::Rparen:
+    assert(nestingLevel != 0);
     expr = context.createEmptySExpr();
     break;
   }
@@ -29,6 +34,11 @@ SExpr *Parser::parse() {
 SExpr *Parser::parseInteger() {
   assert(currentToken.getKind() == Token::Integer);
   return context.createIntLiteral(currentToken.getText());
+}
+
+SExpr *Parser::parseSymbol() {
+  assert(currentToken.getKind() == Token::Symbol);
+  return context.createSymbolAtom(currentToken.getText());
 }
 
 SExpr *Parser::parseSExpr() {

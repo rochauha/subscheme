@@ -50,6 +50,18 @@ SExpr *Context::createIntLiteral(std::string_view integerStr) {
   return intLiteral;
 }
 
+SExpr *Context::createPair(SExpr *first, SExpr *rest) {
+  SExpr *pair = new SExpr(SExpr::Pair, first, rest);
+  allocatedExprs.push_back(pair);
+  return pair;
+}
+
+SExpr *Context::createEmptySExpr() {
+  SExpr *empty = new SExpr(SExpr::Empty);
+  allocatedExprs.push_back(empty);
+  return empty;
+}
+
 Context::~Context() {
   for (SExpr *expr : allocatedExprs) {
     delete expr;

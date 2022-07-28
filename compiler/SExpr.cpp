@@ -29,7 +29,8 @@ SExpr::SExpr(Kind k, char *symbolName) {
 
 SExpr::SExpr(Kind k, SExpr *car, SExpr *cdr) {
   assert(k == Pair && "this constructor only creates compound s-expressions");
-  assert(car && cdr && "car and cdr musb be non-null");
+  assert(car && "car must be non-null");
+  assert(cdr && "cdr must be non-null");
   kind = k;
   this->car = car;
   this->cdr = cdr;
@@ -40,11 +41,7 @@ int64_t SExpr::getAsInteger() const {
   return integerLiteral;
 }
 
-bool SExpr::isEmpty() const {
-  assert(car == nullptr && cdr == nullptr &&
-         "Empty SExpr must not have a car and cdr");
-  return kind == Empty;
-}
+bool SExpr::isEmpty() const { return kind == Empty; }
 
 void SExpr::dump(std::ostream &os) const {
   switch (kind) {
@@ -60,14 +57,26 @@ void SExpr::dump(std::ostream &os) const {
     os << symbolName;
     break;
 
-  default:
+  case Pair:
     os << '(';
-
-    assert(car && cdr);
     car->dump(os);
     os << " . ";
     cdr->dump(os);
-
     os << ')';
   }
+}
+
+bool SExpr::isList() const {
+  if (!isPair())
+    return false;
+
+  const SExpr *currentPair = this;
+  while (currentPair->getCdr()) {
+    currentPair = currentPair->getCdr();
+  }
+
+  if (currentPair->isEmpty())
+    return true;
+
+  return false;
 }

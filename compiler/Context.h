@@ -14,13 +14,17 @@ struct TextBuffer {
 
 class Context {
 public:
-  SExpr *createIntLiteral(std::string_view integerStr);
-
   Context(const char *filePath);
 
   ~Context();
 
   const std::vector<SExpr *> getTopLevelExprs() const { return topLevelExprs; }
+
+  SExpr *createEmptySExpr();
+
+  SExpr *createIntLiteral(std::string_view integerStr);
+
+  SExpr *createPair(SExpr *first, SExpr *rest);
 
 private:
   TextBuffer getTextBuffer(const char *filePath);

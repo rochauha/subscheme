@@ -14,9 +14,13 @@ public:
 
   bool isEmpty() const;
 
-  bool isAtom() const { return !isEmpty() && kind != Pair; }
+  bool isPair() const { return kind == Pair; }
+
+  bool isAtom() const { return !isEmpty() && !isPair(); }
 
   bool isInteger() const { return kind == Integer; }
+
+  bool isList() const;
 
   SExpr *getCar() const { return car; }
 

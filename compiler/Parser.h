@@ -17,7 +17,13 @@ public:
   const std::vector<SExpr *> &getTopLevelExprs() const { return topLevelExprs; }
 
 private:
+  SExpr *parseSExpr();
+
+  SExpr *parseInteger();
+
   Lexer &lexer;
+
+  Token currentToken;
 
   Context &context;
 

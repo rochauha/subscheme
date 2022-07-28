@@ -3,14 +3,45 @@
 #include <cassert>
 
 SExpr *Parser::parse() {
-  Token token = lexer.lexToken();
-  if (token.getKind() == Token::Integer) {
-    SExpr *expr = context.createIntLiteral(token.getText());
-    if (nestingLevel == 0)
-      topLevelExprs.push_back(expr);
+  currentToken = lexer.lexToken();
+  SExpr *expr = nullptr;
 
-    return expr;
+  switch (currentToken.getKind()) {
+  case Token::Integer:
+    expr = parseInteger();
+    break;
+
+  case Token::Lparen:
+    expr = parseSExpr();
+    break;
+
+  case Token::Rparen:
+    expr = context.createEmptySExpr();
+    break;
   }
 
-  assert(false && "token not an integer!");
+  if (nestingLevel == 0)
+    topLevelExprs.push_back(expr);
+
+  return expr;
+}
+
+SExpr *Parser::parseInteger() {
+  assert(currentToken.getKind() == Token::Integer);
+  return context.createIntLiteral(currentToken.getText());
+}
+
+SExpr *Parser::parseSExpr() {
+  ++nestingLevel;
+
+  SExpr *currentFirst = parse();
+
+  if (currentFirst->isEmpty()) {
+    --nestingLevel;
+    return currentFirst;
+  }
+
+  SExpr *currentRest = parseSExpr();
+  --nestingLevel;
+  return context.createPair(currentFirst, currentRest);
 }

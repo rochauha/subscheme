@@ -13,6 +13,14 @@ Token Lexer::lexToken() {
       ++curPtr;
       continue;
 
+    case '(':
+      ++curPtr;
+      return createToken(Token::Lparen, curPtr - 1, 1);
+
+    case ')':
+      ++curPtr;
+      return createToken(Token::Rparen, curPtr - 1, 1);
+
     // ignore comments
     case ';':
       while (*curPtr != '\n')

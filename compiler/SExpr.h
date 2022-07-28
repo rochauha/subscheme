@@ -22,9 +22,9 @@ public:
 
   bool isList() const;
 
-  SExpr *getCar() const { return car; }
+  SExpr *getFirst() const { return first; }
 
-  SExpr *getCdr() const { return cdr; }
+  SExpr *getRest() const { return rest; }
 
   int64_t getAsInteger() const;
 
@@ -39,7 +39,7 @@ private:
 
   SExpr(Kind k, char *symbolName);
 
-  SExpr(Kind k, SExpr *car, SExpr *cdr);
+  SExpr(Kind k, SExpr *first, SExpr *rest);
 
   Kind kind;
 
@@ -47,9 +47,9 @@ private:
 
   char *symbolName;
 
-  SExpr *car;
+  SExpr *first;
 
-  SExpr *cdr;
+  SExpr *rest;
 };
 
 #endif

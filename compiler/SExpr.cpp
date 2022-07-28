@@ -6,8 +6,8 @@ SExpr::SExpr(Kind k) {
   assert(k == Empty && "this constructor only creates empty SExprs");
   kind = k;
   symbolName = nullptr;
-  car = nullptr;
-  cdr = nullptr;
+  first = nullptr;
+  rest = nullptr;
 }
 
 SExpr::SExpr(Kind k, int64_t intLiteral) {
@@ -15,25 +15,25 @@ SExpr::SExpr(Kind k, int64_t intLiteral) {
   kind = k;
   integerLiteral = intLiteral;
   symbolName = nullptr;
-  car = nullptr;
-  cdr = nullptr;
+  first = nullptr;
+  rest = nullptr;
 }
 
 SExpr::SExpr(Kind k, char *symbolName) {
   assert(k == Symbol && "this constructor only creates symbolic values");
   kind = k;
   this->symbolName = symbolName;
-  car = nullptr;
-  cdr = nullptr;
+  first = nullptr;
+  rest = nullptr;
 }
 
-SExpr::SExpr(Kind k, SExpr *car, SExpr *cdr) {
+SExpr::SExpr(Kind k, SExpr *first, SExpr *rest) {
   assert(k == Pair && "this constructor only creates compound s-expressions");
-  assert(car && "car must be non-null");
-  assert(cdr && "cdr must be non-null");
+  assert(first && "first must be non-null");
+  assert(rest && "rest must be non-null");
   kind = k;
-  this->car = car;
-  this->cdr = cdr;
+  this->first = first;
+  this->rest = rest;
 }
 
 int64_t SExpr::getAsInteger() const {
@@ -59,9 +59,9 @@ void SExpr::dump(std::ostream &os) const {
 
   case Pair:
     os << '(';
-    car->dump(os);
+    first->dump(os);
     os << " . ";
-    cdr->dump(os);
+    rest->dump(os);
     os << ')';
   }
 }
@@ -71,8 +71,8 @@ bool SExpr::isList() const {
     return false;
 
   const SExpr *currentPair = this;
-  while (currentPair->getCdr()) {
-    currentPair = currentPair->getCdr();
+  while (currentPair->getRest()) {
+    currentPair = currentPair->getRest();
   }
 
   if (currentPair->isEmpty())
